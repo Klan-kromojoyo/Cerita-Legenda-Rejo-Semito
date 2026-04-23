@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legenda REJO SEMITO - Versi Premium</title>
+
+    <style>
+        /* TEMA WARNA & BACKGROUND */
+        body {
+            margin: 0;
+            font-family: "Georgia", serif;
+            /* Background gradasi gelap seperti suasana malam pedesaan */
+            background: radial-gradient(circle, #2c1e14 0%, #120d0a 100%);
+            color: #f4e4bc;
+            line-height: 1.6;
+        }
+
+        /* HEADER DENGAN EFEK KUNO */
+        header.main-header {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/Header%20komik.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 5px solid #c9a96e;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+        }
+
+        header.main-header h1 {
+            color: #f9e6c3;
+            font-size: 36px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 3px 3px 15px #000;
+            border: 2px solid #c9a96e;
+            padding: 15px 30px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* AREA TOMBOL EPISODE */
+        .episodes {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .episodes button {
+            margin: 8px;
+            padding: 12px 25px;
+            background: #5a3e2b;
+            color: #f9e6c3;
+            border: 2px solid #c9a96e;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .episodes button:hover {
+            background: #c9a96e;
+            color: #000;
+            transform: translateY(-3px);
+        }
+
+        .episodes button.active {
+            background: #c9a96e;
+            color: #000;
+            box-shadow: 0 0 15px #c9a96e;
+        }
+
+        /* CONTAINER KOMIK */
+        .comic-container {
+            max-width: 800px;
+            margin: auto;
+            border: 10px solid #2a1f17;
+            outline: 2px solid #c9a96e;
+            background: #000;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+        }
+
+        .comic-container img {
+            width: 100%;
+            display: block;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* NARASI (EFEK KERTAS TUA) */
+        .narration {
+            max-width: 760px;
+            margin: 20px auto;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-style: italic;
+            background: #f4e4bc; /* Warna kertas lama */
+            color: #3b2b1f;
+            border-radius: 5px;
+            border-left: 8px solid #c9a96e;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* NAVIGASI BAWAH (PANAH) */
+        .nav-arrows {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .nav-arrows button {
+            background: none;
+            border: 2px solid #c9a96e;
+            color: #c9a96e;
+            padding: 10px 20px;
+            margin: 0 15px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .nav-arrows button:hover {
+            background: rgba(201, 169, 110, 0.2);
+        }
+
+        /* SILSILAH */
+        .tree {
+            text-align: center;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(42, 31, 23, 0.6);
+            border-top: 2px solid #c9a96e;
+        }
+
+        .tree h2 {
+            color: #c9a96e;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+
+        .person {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            border: 2px solid #c9a96e;
+            background: #1e1a17;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 50px; /* Bentuk kapsul */
+        }
+
+        .person:hover {
+            background: #f9e6c3;
+            color: #1e1a17;
+            box-shadow: 0 0 20px #f9e6c3;
+        }
+
+        /* POPUP INFO (TIDAK OTOMATIS HILANG) */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: #1e1a17;
+            color: #f9e6c3;
+            padding: 30px;
+            display: none;
+            border: 3px solid #c9a96e;
+            box-shadow: 0 0 100px rgba(0,0,0,1);
+            z-index: 1000;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .popup button {
+            margin-top: 20px;
+            background: #c9a96e;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+
+        /* TOMBOL MUSIK FLOATING */
+        .audio-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #c9a96e;
+            color: #000;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="main-header">
+  
+</header>
+
+<div class="episodes" id="epBtns">
+    <button onclick="loadEpisode(1)" id="btn1">Bagian I</button>
+    <button onclick="loadEpisode(2)" id="btn2">Bagian II</button>
+    <button onclick="loadEpisode(3)" id="btn3">Bagian III</button>
+</div>
+
+<div class="comic-container">
+    <img id="comicImage" src="https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Cover.jpg">
+</div>
+
+<div class="narration" id="storyText">
+    Ketuk "Bagian I" atau gunakan panah keyboard untuk memulai perjalanan legenda...
+</div>
+
+<div class="nav-arrows">
+    <button onclick="prevEp()">◀ Sebelumnya</button>
+    <button onclick="nextEp()">Selanjutnya ▶</button>
+</div>
+
+<div class="tree">
+    <h2>SILSILAH KELUARGA</h2>
+    <div class="person" onclick="showInfo('REJO SEMITO: Sang leluhur utama yang penuh perjuangan dan memiliki kekuatan .')">REJO SEMITO</div>
+    <div class="person" onclick="showInfo('ANAK PERTAMA: Sosok pemberani yang mewarisi ketegasan sang ayah.')">GINEM</div>
+    <div class="person" onclick="showInfo('ANAK KEDUA: Seorang penengah yang bijaksana dan sangat mencintai kedamaian.')">GIYEM</div>
+    <div class="person" onclick="showInfo('ANAK KETIGA: Penjaga rahasia keluarga yang hidupnya penuh kemisteriusan.')">NARTI</div>
+    <div class="person" onclick="showInfo('Satu-satunya anak lelaki, hidup tanpa pernah merasakan belaian kasih sayang ibu.')">SLAMET</div>
+</div>
+
+<div class="popup" id="popup">
+    <div id="popupText"></div>
+    <button onclick="closePopup()">Tutup</button>
+</div>
+
+<audio id="music" loop>
+    <source src="https://github.com/nguantukbanget84-sys/AYAM-ENAK/raw/refs/heads/main/Merinding%20Dengar%20Ini!%20Inilah%20Misteri%20Alunan%20Musik%20Kuno%20lagu%20kerajaan%20majapah.mp3">
+</audio>
+
+<div class="audio-btn" id="mBtn" onclick="toggleMusic()">🔊 Putar Musik</div>
+
+<script>
+    const image = document.getElementById("comicImage");
+    const text = document.getElementById("storyText");
+    const popup = document.getElementById("popup");
+    const pText = document.getElementById("popupText");
+    const music = document.getElementById("music");
+    const mBtn = document.getElementById("mBtn");
+
+    const episodes = {
+        1: {
+            img: "https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Cerita%20pendek.png",
+            text: "Mbah Rejo lahir dalam kondisi penuh tanda-tanda gaib. Alam menyambut kehadirannya dengan gemuruh yang tenang."
+        },
+        2: {
+            img: "https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Komik%20REJO%20SEMITO.jpg",
+            text: "Di usia muda, ia menghadapi cobaan besar yang menempa jiwanya menjadi sekeras baja namun berhati emas."
+        },
+        3: {
+            img: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/1.png",
+            text: "Warisan keluarga mulai terbentuk, sebuah amanah besar untuk menjaga kerukunan anak cucu di masa depan."
+        }
+    };
+
+    let currentEp = 0;
+
+    function loadEpisode(ep) {
+        currentEp = ep;
+        // Efek Transisi
+        image.style.opacity = 0;
+        
+        setTimeout(() => {
+            image.src = episodes[ep].img;
+            text.innerText = episodes[ep].text;
+            image.style.opacity = 1;
+        }, 400);
+
+        // Update Tombol Aktif
+        for(let i=1; i<=3; i++){
+            document.getElementById('btn'+i).classList.remove('active');
+        }
+        document.getElementById('btn'+ep).classList.add('active');
+        
+        // Scroll otomatis ke gambar
+        image.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function nextEp() {
+        if(currentEp < 3) loadEpisode(currentEp + 1);
+    }
+
+    function prevEp() {
+        if(currentEp > 1) loadEpisode(currentEp - 1);
+    }
+
+    // Keyboard Support
+    window.addEventListener('keydown', (e) => {
+        if (e.key === "ArrowRight") nextEp();
+        if (e.key === "ArrowLeft") prevEp();
+    });
+
+    function showInfo(info) {
+        pText.innerText = info;
+        popup.style.display = "block";
+    }
+
+    function closePopup() {
+        popup.style.display = "none";
+    }
+
+    function toggleMusic(){
+        if(music.paused){
+            music.play();
+            mBtn.innerHTML = "🔇 Matikan Musik";
+        } else {
+            music.pause();
+            mBtn.innerHTML = "🔊 Putar Musik";
+        }
+    }
+</script>
+
+</body>
+</html>
