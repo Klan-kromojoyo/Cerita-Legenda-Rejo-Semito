@@ -41,6 +41,10 @@ body {
     color: #f4e4bc;
     overflow-x: hidden;
 }
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
 
 /* ✨ EFEK KABUT HALUS */
 body::before {
@@ -57,7 +61,12 @@ body::before {
     from { transform: translate(0,0); }
     to { transform: translate(-200px,-200px); }
 }
-
+#mediaContainer img,
+#mediaContainer video {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
 /* 🎬 INTRO FULLSCREEN */
 #intro {
     position: fixed;
@@ -183,38 +192,107 @@ header {
 
 /* 🧭 TOMBOL EPISODE */
 .episodes {
-    text-align: center;
-    padding: 25px;
-    position: relative;
-    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 20px;
+    max-width: 500px;
+    margin: auto;
 }
 
+/* 🪨 DASAR BATU */
 .episodes button {
-    margin: 6px;
-    padding: 12px 22px;
-    background: rgba(90, 62, 43, 0.8);
-    color: #f4e4bc;
-    border: 2px solid #c9a96e;
+    position: relative;
+    padding: 18px;
+    border-radius: 14px;
     cursor: pointer;
-    border-radius: 30px;
     font-weight: bold;
+    letter-spacing: 1px;
+
+    color: #f4e4bc;
+
+    /* tekstur batu */
+    background:
+        linear-gradient(145deg, #2b2118, #120d0a);
+
+    border: 2px solid #3a2c1f;
+
+    box-shadow:
+        inset 0 2px 5px rgba(255,255,255,0.05),
+        inset 0 -5px 10px rgba(0,0,0,0.8),
+        0 5px 15px rgba(0,0,0,0.9);
+
     transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
+    overflow: hidden;
 }
 
+/* ✨ UKIRAN EMAS */
+.episodes button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+
+    background:
+        linear-gradient(120deg,
+            rgba(255,215,120,0.15),
+            rgba(255,255,255,0.05),
+            rgba(255,215,120,0.15)
+        );
+
+    mix-blend-mode: screen;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* 🌟 GARIS UKIRAN HALUS */
+.episodes button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+
+    box-shadow:
+        inset 0 0 15px rgba(201,169,110,0.4),
+        inset 0 0 3px rgba(255,255,255,0.2);
+
+    pointer-events: none;
+}
+
+/* 🔥 HOVER (emas menyala) */
 .episodes button:hover {
-    background: #c9a96e;
-    color: #000;
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 0 15px #c9a96e;
+    transform: translateY(-4px) scale(1.03);
+
+    border: 2px solid #c9a96e;
+
+    box-shadow:
+        inset 0 2px 5px rgba(255,255,255,0.1),
+        inset 0 -5px 10px rgba(0,0,0,0.8),
+        0 0 20px rgba(201,169,110,0.6),
+        0 8px 20px rgba(0,0,0,0.9);
+
+    color: #fff3d0;
 }
 
+/* 💥 KLIK */
+.episodes button:active {
+    transform: scale(0.96);
+
+    box-shadow:
+        inset 0 5px 10px rgba(0,0,0,0.9),
+        inset 0 -2px 5px rgba(255,255,255,0.05);
+}
+
+/* 🌟 AKTIF (dipilih) */
 .episodes button.active {
-    background: #c9a96e;
-    color: #000;
-    box-shadow: 0 0 20px #c9a96e;
-}
+    border: 2px solid #ffd27a;
 
+    box-shadow:
+        inset 0 0 10px rgba(255,215,120,0.6),
+        0 0 25px rgba(201,169,110,0.8);
+
+    color: #fff5cc;
+}
 /* 🖼️ CONTAINER KOMIK */
 .comic-container {
     max-width: 820px;
@@ -410,6 +488,12 @@ button{cursor:pointer}
         font-size: 12px;
     }
 }
+#mediaContainer video {
+    width: 100%;
+    border-radius: 8px;
+    background: #000;
+}
+
 
 </style>
 </head>
@@ -429,7 +513,7 @@ button{cursor:pointer}
 
 <div class="episodes" id="epBtns"></div>
 
-<div class="comic-container">
+<div id="mediaContainer">
     <img id="comicImage" src="https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Cover.jpg">
 </div>
 <div style="text-align:center; margin:20px;">
@@ -469,7 +553,7 @@ button{cursor:pointer}
 <div class="audio-btn" onclick="toggleMusic()">🔊</div>
 
 <script>
-const image = document.getElementById("comicImage");
+
 const text = document.getElementById("storyText");
 const music = document.getElementById("music");
 const popup = document.getElementById("popup");
@@ -479,38 +563,58 @@ let currentEp = 0;
 
 // 🔥 DATA EPISODE (TAMBAH DI SINI SAJA)
 const episodes = {
-    1: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Cerita%20pendek.png",
+    1: { type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Cerita%20pendek.png",
         text: "Kisah ini di tulis langsung oleh narasumber"
     },
     2: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Komik%20REJO%20SEMITO.jpg",
+      type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/silsilah-audio/refs/heads/main/Komik%20REJO%20SEMITO.jpg",
         text: "Masa muda penuh cobaan..."
     },
     3: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/1.png",
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/1.png",
         text: "Warisan keluarga mulai terbentuk, sebuah amanah besar untuk menjaga kerukunan anak cucu di masa depan."
     },
     4: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/2.png",
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/2.png",
         text: "Episode baru dimulai di sini..."
     },
     5: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/3.png",
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/3.png",
         text: "Perjuangan Mbah REJO"
     },
     6: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/4.png",
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/4.png",
         text: "Saat melewati alas ngawi"
     },
     7: {
-        img: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/5.png",
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/5.png",
         text: "begitu tiba di tujuan.."
+    },
+    8: {
+        type: "video", src: "https://github.com/nguantukbanget84-sys/silsilah-audio/raw/refs/heads/main/Ilustrasi%20suasana.mp4",
+        text: "ilustrasi suasana saat itu"
+    },
+    9: {
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/6.png",
+        text: "Di sambut oleh Ayahnya (mbah Putih)"
+    },
+    10: {
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/7.png",
+        text: "Menyampaikan tujuanya jauh-jauh dari Ceplukan ke ngawi..."
+    },
+    11: {
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/8.png",
+        text: "Berpamitan.."
+    },
+    12: {
+        type: "image", src: "https://raw.githubusercontent.com/nguantukbanget84-sys/KOMIK/refs/heads/main/9.png",
+        text: "Bercerita sejenak.."
     }
 };
 
 // 🔥 AUTO BUAT TOMBOL
 const epContainer = document.getElementById("epBtns");
+
 
 for(let i in episodes){
     const btn = document.createElement("button");
@@ -528,10 +632,38 @@ function loadEpisode(ep){
 
     currentEp = ep;
 
-    image.src = episodes[ep].img;
+    const container = document.getElementById("mediaContainer");
+    container.innerHTML = "";
+
+    let media;
+
+    if(episodes[ep].type === "image"){
+        media = document.createElement("img");
+        media.src = episodes[ep].src;
+    }
+
+    if(episodes[ep].type === "video"){
+    media = document.createElement("video");
+    media.src = episodes[ep].src;
+    media.controls = true;
+    media.autoplay = true;
+    media.muted = true; // Tambahkan ini agar autoplay diizinkan browser
+    media.setAttribute('playsinline', ''); // Penting untuk pengguna iPhone/iOS
+    
+    // Mencoba memutar manual setelah elemen masuk ke DOM
+    setTimeout(() => {
+        media.play().catch(error => {
+            console.log("Autoplay diblokir, pengguna harus klik play manual.");
+        });
+    }, 100);
+}
+
+
+    media.style.width = "100%";
+    container.appendChild(media);
+
     text.innerText = episodes[ep].text;
 
-    // reset tombol
     for(let i in episodes){
         const b = document.getElementById("btn"+i);
         if(b) b.classList.remove("active");
